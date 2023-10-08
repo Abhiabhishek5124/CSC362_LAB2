@@ -2,23 +2,19 @@
 // CSC 362 Programming Assignment 2
 
 // Program Description:
-// This program predicts the outcome of American football games based on the relative strengths
-// of home and visiting teams. It reads input data from a user-specified file, computes the rankings
-// for the matchup between two teams, and predicts the score differential (who wins and by how much).
-// The program also maintains running totals for the number of games, the number of home teams
-// predicted to win, and the total score difference.
+// American Football Prediction Program
 
-// The program is divided into several functions:
-// - getInput: Reads game data from the input file.
-// - computeStrengthsAndDifference: Calculates the relative strengths and score difference.
-// - outputResult: Outputs the result of each game.
-// - updateStats: Updates game statistics.
-// - summary: Computes and displays the percentage of home team wins and the average score difference.
-// To run the program, provide the input filename when prompted, and it will process the data
-// and provide predictions for each game, as well as a summary at the end.
-// Note: Make sure to create an input file with the specified format before running the program.
+// This program predicts the outcomes of American football games based on various team strengths.
+// It uses attributes like offensive strength, defensive strength, special teams strength, home strength, and crowd noise (home field advantage)
+// to calculate the relative strengths of home and visiting teams.
+// The program then predicts the score difference between the teams and maintains statistics on the number of games, home team wins, and total score differences.
 
-
+// Program Structure and Files:
+// The program is divided into multiple files:
+// - main.c: Contains the main function, handles user input, file operations, and coordinates program flow.
+// - compute.c: Includes computational functions for evaluating relative strengths, score differences, and statistics updating.
+// - io.c: Manages input/output operations.
+// - header.h: Centralizes function prototypes and constants shared across files.
 
 
 #include "header.h" // Include the header file that contains function prototypes
@@ -55,9 +51,19 @@ int main(){
     // difference: Score Difference between Home and Visiting Teams
 
     while (getInput(inputFile, homeTeam, &HTO, &HTD, &HTS, &HTH, &HTC, visitingTeam, &VTO, &VTD, &VTS, &VTR) != EOF) {
-        // Read game data from the input file, compute the score difference, and update statistics
-        computeStrengthsAndDifference(HTO, HTD, HTS, HTH, HTC, VTO, VTD, VTS, VTR, &difference);
+        // Declare variables to store computed strengths and differences
+        double homeStrength, visitingStrength, specialTeamsImpact, homeFieldAdvantage, visitingRoadStrength;
+
+        // Compute the relative strengths of the home and visiting teams
+        computeStrengths(HTO, HTD, HTS, HTH, HTC, VTO, VTD, VTS, VTR, &homeStrength, &visitingStrength, &specialTeamsImpact, &homeFieldAdvantage, &visitingRoadStrength);
+
+        // Calculate the score difference between the home and visiting teams
+        computeDifference(homeStrength, visitingStrength, specialTeamsImpact, homeFieldAdvantage, visitingRoadStrength, &difference);
+
+        // Output the result of the game prediction, indicating the winner and score difference
         outputResult(homeTeam, visitingTeam, difference); // Output the result of the game
+
+        // Update game statistics, including the total number of games, home team wins, and total score difference
         updateStats(&totalGames, &homeWins, &totalDifference, difference); // Update game statistics
     }
 
@@ -85,6 +91,6 @@ int main(){
 //Texas beats Oklahoma by 3
 //USC beats Arizona by 8
 //Wisconsin beats Rutgers by 4
-
+//
 //Percentage of home team wins is predicted as 69.23%
 //Average difference in scores is predicted as 4.23

@@ -1,10 +1,8 @@
 /*
    IO.c Description:
-   The "io.c" file contains functions responsible for input, output, and statistics updating in the football game prediction program.
+   The "io.c" file contains functions responsible for input and output
 */
 #include "header.h" // Include the header file that contains function prototypes
-#include <math.h> // Include the math library for the abs function
-#include <stdlib.h> // Include the standard library for additional functions
 
 int getInput(FILE *inputFile, char *homeTeam, int *HTO, int *HTD, int *HTS, int *HTH, int *HTC, char *visitingTeam, int *VTO, int *VTD, int *VTS, int *VTR) {
     // Function to read input data from the file and store it in variables
@@ -15,7 +13,7 @@ int getInput(FILE *inputFile, char *homeTeam, int *HTO, int *HTD, int *HTS, int 
     // - visitingTeam: Pointer to a character array for the visiting team name
     // - VTO, VTD, VTS, VTR: Pointers to integer variables for various visiting team attributes
     // Uses fscanf to read data from the file
-    // Returns the result of fscanf (number of items read or EOF)
+    // Returns the result of fscanf
     return fscanf(inputFile, "%19s %d %d %d %d %d %19s %d %d %d %d", homeTeam, HTO, HTD, HTS, HTH, HTC, visitingTeam, VTO, VTD, VTS, VTR);
 }
 
@@ -39,22 +37,6 @@ void outputResult(char *homeTeam, char *visitingTeam, int difference) {
     }
 }
 
-// Function to update game statistics
-void updateStats(int *totalGames, int *homeWins, double *totalDifference, int difference) {
-    // Parameters:
-    // - totalGames: Pointer to an integer variable storing the total number of games
-    // - homeWins: Pointer to an integer variable storing the total number of home team wins
-    // - totalDifference: Pointer to a double variable storing the total score difference
-    // - difference: The score difference of the current game
-    // Updates the statistics by incrementing 'totalGames', 'homeWins' (if the home team wins or ties),
-    // and adds 'difference' to 'totalDifference'
-
-    (*totalGames)++; // Increment the total number of games
-    if (difference >= 0) {
-        (*homeWins)++; // Increment home team wins if the difference is non-negative
-    }
-    *totalDifference += difference; // Add the current game's difference to the total difference
-}
 
 // Function to calculate and display the summary of game predictions
 void summary(int totalGames, int homeWins, double totalDifference) {
@@ -62,7 +44,6 @@ void summary(int totalGames, int homeWins, double totalDifference) {
     // - totalGames: The total number of games predicted
     // - homeWins: The total number of home team wins
     // - totalDifference: The total score difference of all games
-
 
     double percentage = ((double)homeWins / totalGames) * 100; // Calculate the percentage of home team wins
     double averageDifference = totalDifference / totalGames; // Calculate the average score difference
